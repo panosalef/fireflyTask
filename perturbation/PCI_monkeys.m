@@ -1,9 +1,13 @@
+%% PCI_monkeys.m  -  per-session AUCs for the three animals (monkey-only version of AUC_scatter)
+% Set FIREFLY_DATA_ROOT or edit DATA_ROOT below.
+DATA_ROOT = getenv('FIREFLY_DATA_ROOT'); if isempty(DATA_ROOT), DATA_ROOT = fullfile(pwd,'data','perturbation'); end
+
 clear
 monks = [44 51 53];
 
 %% Monkeys
 for i=1:numel(monks)
-    [m] = con_ptbprs(strcat('/Users/panos/Documents/MATLAB/quarantine/Firefly-ptb/m',num2str(monks(i))));
+    [m] = con_ptbprs(fullfile(DATA_ROOT,['m' num2str(monks(i))]));
     ms = split_trials(m);
     ses = unique(ms.prs.sesno.all);
     

@@ -1,4 +1,8 @@
 function out = get_Eu_error(r_targ,r_resp,theta_targ,theta_resp)
+%GET_EU_ERROR  Euclidean distance between target and stopping position.
+%   out = get_Eu_error(r_targ, r_resp, theta_targ, theta_resp) takes cell
+%   arrays of polar coordinates (degrees) and returns a cell array of
+%   per-trial Euclidean errors.
 
 for i=1:numel(r_targ)
     

@@ -1,4 +1,12 @@
-[~,m] = concat_basisF2('/Users/panos/Documents/MATLAB/quarantine/Firefly-ptb/m51');
+%% plot_kernel.m  -  perturbation response kernels (forward/backward, congruent/incongruent)
+% Pools the perturbed trials of one animal (concat_basisF2), then estimates
+% the linear-speed kernel for forward vs backward perturbations and the
+% angular-speed kernel for congruent vs incongruent ones (get_kernel).
+% Set FIREFLY_DATA_ROOT or edit DATA_ROOT below; ANIMAL selects the folder.
+DATA_ROOT = getenv('FIREFLY_DATA_ROOT'); if isempty(DATA_ROOT), DATA_ROOT = fullfile(pwd,'data','perturbation'); end
+ANIMAL = 'm51';
+
+[~,m] = concat_basisF2(fullfile(DATA_ROOT,ANIMAL));
 
 f_idx = m.ptb.prs.A_v > 0 ;
 con_idx = sign((m.ptb.targ.theta) .* m.ptb.prs.A_w) > 0 ;

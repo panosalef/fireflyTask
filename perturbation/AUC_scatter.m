@@ -1,8 +1,16 @@
+%% AUC_scatter.m  -  ROC/AUC of perturbed vs simulated-perturbed vs unperturbed trials
+% For each animal and session: pool trials (con_ptbprs, split_trials), build
+% the "ignore the perturbation" control with gen_sim_ptb, run the ROC analysis
+% (ComputeROCFirefly from firefly-monkey) and compute AUCs; then the same for
+% human subjects with and without feedback. Produces the AUC scatter figure.
+% Set FIREFLY_DATA_ROOT or edit DATA_ROOT below.
+DATA_ROOT = getenv('FIREFLY_DATA_ROOT'); if isempty(DATA_ROOT), DATA_ROOT = fullfile(pwd,'data','perturbation'); end
+
 monks = [44 51 53];
 
 %% Monkeys
 for i=1:numel(monks)
-    [m] = con_ptbprs(strcat('/Users/panos/Documents/MATLAB/quarantine/Firefly-ptb/m',num2str(monks(i))));
+    [m] = con_ptbprs(fullfile(DATA_ROOT,['m' num2str(monks(i))]));
     
     ms = split_trials(m);
     
@@ -39,9 +47,9 @@ AUC.sp(AUC.sp == 0) = NaN;
 
 
 %with feedback
-[Htarg_f,Hresp_f] = prep_data3_f('/Users/panos/Documents/MATLAB/quarantine/Firefly-ptb/Humans/Data/data_ptbwithfb.mat');
+[Htarg_f,Hresp_f] = prep_data3_f(fullfile(DATA_ROOT,'Humans','Data','data_ptbwithfb.mat'));
 
-load '/Users/panos/Documents/MATLAB/quarantine/Firefly-ptb/Humans/Data/data_ptbwithfb.mat'
+load fullfile(DATA_ROOT,'Humans','Data','data_ptbwithfb.mat')
 for i = 1:numel(subjects)
     
     for b = 1:20
@@ -73,9 +81,9 @@ end
 
 
 %without feedback
-[Htarg_nf,Hresp_nf] = prep_data3_nf('/Users/panos/Documents/MATLAB/quarantine/Firefly-ptb/Humans/Data/data_ptbwithoutfb.mat');
+[Htarg_nf,Hresp_nf] = prep_data3_nf(fullfile(DATA_ROOT,'Humans','Data','data_ptbwithoutfb.mat'));
 
-load '/Users/panos/Documents/MATLAB/quarantine/Firefly-ptb/Humans/Data/data_ptbwithoutfb.mat'
+load fullfile(DATA_ROOT,'Humans','Data','data_ptbwithoutfb.mat')
 for i = 1:numel(Htarg_nf.p.r)
     
     for b = 1:20

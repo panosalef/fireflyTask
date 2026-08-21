@@ -1,4 +1,10 @@
 function [kernel,ts] = get_kernel(Yresp,Amplitudes,Yphant)
+%GET_KERNEL  Estimate the response kernel to a velocity perturbation.
+%   [kernel, ts] = get_kernel(Yresp, Amplitudes, Yphant) regresses the
+%   concatenated speed responses (Yresp, perturbed trials) and the matched
+%   unperturbed traces (Yphant) on a basis of 48 ms boxcar functions scaled by
+%   each trial's perturbation amplitude, median-filters both fits and returns
+%   their difference on the 0-2 s grid ts.
 
 ts = 0:.006:2;
 t_sq=.024:.006:2; %basis function width
