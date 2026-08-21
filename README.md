@@ -13,7 +13,7 @@ this repository holds the analysis for each:
 
 | Module | Manipulation | What the code does |
 |---|---|---|
-| `perturbation/` | Unpredictable optic-flow perturbations that push the subject off course | Pools perturbed trials and their timing (`con_ptbprs`, `split_trials`, `concat_basisF2`); simulates the "ignored the perturbation" counterfactual by adding the perturbation profile to matched unperturbed trajectories (`gen_sim_ptb`); compares real, simulated and unperturbed trials with ROC/AUC (`AUC_scatter`, `PCI_monkeys`); estimates the velocity response kernel to the perturbation by regression on a boxcar basis (`get_kernel`, `plot_kernel`) |
+| `perturbation/` | Unpredictable optic-flow perturbations that push the subject off course | The two core methods: `gen_sim_ptb` simulates the "ignored the perturbation" counterfactual by adding the perturbation velocity profile to matched unperturbed trajectories and integrating to a stopping point (the control against which real endpoints are compared by ROC/AUC); `get_kernel` estimates the velocity response kernel to the perturbation by regressing speed traces on an amplitude-scaled boxcar basis |
 | `gain/` | Joystick gain (1, 1.5, 2) changes the consequence of every action | Pools sessions by gain (`con_gain`); travel-time CDFs per gain (`time_cdf_fun`, `time_cdf`); log-log regression of travel time on distance and speed (`LOGregress_fun`) |
 | `density/` | Optic-flow density changes how much evidence the flow carries | Pools sessions by ground-plane density and splits endpoints per density level (`con_dens`) |
 | `utils/` | | Euclidean endpoint error, cell concatenation |
@@ -35,20 +35,12 @@ MATLAB R2020a or later, Statistics and Machine Learning Toolbox (`regress`), Ima
 ```matlab
 setenv('FIREFLY_DATA_ROOT', '/path/to/sessions')   % folders m44/, m51/, m53/ with session .mat files
 addpath(genpath(pwd))
-time_cdf            % gain: travel-time CDFs
-plot_kernel         % perturbation: response kernels
-AUC_scatter         % perturbation: ROC/AUC, monkeys and humans
+time_cdf                                            % gain: travel-time CDFs per gain, all animals
+m = con_dens(fullfile(getenv('FIREFLY_DATA_ROOT'),'m51'));   % density: pooled endpoints per density
+[kernel, ts] = get_kernel(Yresp, Amplitudes, Yphant);        % perturbation: response kernel
 ```
 
 Behavioural data are not distributed here; see the data statement in the paper.
-
-## Status
-
-`gain/`, `density/` and `utils/` are self-contained. The perturbation scripts call a handful of helper
-functions from the original working folder that have not yet been committed (`add_ptbn2`,
-`add_theta_ptb`, `add_ptbDisp`, `add_hindex1/2`, `add_continuous`, `get_speedts`, `get_kernel_Base`,
-`gen_simptb_final3`, `prep_data3_f`). They will be added; until then those scripts document the method
-but do not run end to end.
 
 ## Licence
 
